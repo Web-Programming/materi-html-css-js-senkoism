@@ -1,0 +1,21 @@
+body{
+    background-color: #121212;
+    max-width: 100%;
+    text
+}
+
+.nav a:hover{
+    background-color: #ffffff;
+}
+
+#text{
+    color: #ffffff;
+    font-family: 'helvetica', sans-serif;
+
+}
+
+table{
+    display: block;
+    overflow-x: auto;
+    overflow: auto;
+}

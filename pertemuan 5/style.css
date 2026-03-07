@@ -1,0 +1,17 @@
+body {
+    background-color: #121212;
+    
+
+}
+
+.borderrr{
+    border: 2px solid #fff;
+}
+
+#grad {
+  background-image: linear-gradient(to top, red, yellow);
+}
+
+h1 {
+    text-shadow: 2px 2px 4px #ffff;
+}
