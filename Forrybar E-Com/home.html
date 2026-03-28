@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ForryBar - Belanja Online Mudah</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    body { font-family: Arial, sans-serif; }
+
+    .hero {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white;
+      padding: 80px 0;
+    }
+
+    .navbar-brand { font-weight: bold; font-size: 1.4rem; color: #ff6b35 !important; }
+
+    .product-card { transition: transform 0.2s; cursor: pointer; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important; }
+
+    .harga-asli { text-decoration: line-through; color: #999; font-size: 13px; }
+    .harga-diskon { color: #dc3545; font-weight: bold; font-size: 18px; }
+
+    .badge-diskon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #dc3545;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .counter-box {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .counter-box h3 { color: #ff6b35; font-size: 2rem; font-weight: bold; }
+
+    .category-pill {
+      background: #fff3e0;
+      border: 2px solid #ff6b35;
+      color: #ff6b35;
+      padding: 8px 20px;
+      border-radius: 25px;
+      margin: 4px;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .category-pill:hover, .category-pill.active {
+      background: #ff6b35;
+      color: white;
+    }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      padding: 40px 0;
+    }
+
+    .primary-btn { background-color: #ff6b35; color: white; border: none; }
+    .primary-btn:hover { background-color: #e55a25; color: white; }
+
+    .ti { font-size: 1.1em; vertical-align: middle; }
+  </style>
+</head>
+<body style="min-width: 360px;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="home.html">
+        <i class="ti ti-shopping-bag"></i> ForryBar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navToko">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navToko">
+        <form class="d-flex mx-auto my-2 my-lg-0" style="width: 40%;" onsubmit="cari(event)">
+          <input class="form-control me-2" type="search" placeholder="Cari produk..." id="searchInput"/>
+          <button class="btn primary-btn" type="submit">
+            <i class="ti ti-search"></i> Cari
+          </button>
+        </form>
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Produk</a></li>
+          <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+          <li class="nav-item">
+            <button class="btn primary-btn btn-sm ms-2" onclick="alert('Keranjang kosong!')">
+              <i class="ti ti-shopping-cart"></i> Keranjang
+              <span class="badge bg-white text-danger">0</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <h1 class="display-4 fw-bold">
+            Belanja Mudah,<br/>Hemat Setiap Hari!
+            <i class="ti ti-confetti"></i>
+          </h1>
+          <p class="lead">Temukan ribuan produk dengan harga terbaik dan pengiriman cepat ke seluruh Indonesia.</p>
+          <a href="products.html" class="btn btn-light btn-lg me-2 fw-bold" style="color: #ff6b35;">
+            <i class="ti ti-shopping-cart"></i> Belanja Sekarang
+          </a>
+          <a href="#promo" class="btn btn-outline-light btn-lg">
+            <i class="ti ti-tag"></i> Lihat Promo
+          </a>
+        </div>
+        <div class="col-md-6 text-center">
+          <img src="https://via.placeholder.com/450x300/ffffff/ff6b35?text=Shopping+Illustration" class="img-fluid rounded shadow" alt="Shopping"/>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-4 bg-light">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="counter-box">
+            <h3>50K+</h3>
+            <p class="mb-0 text-muted small">
+              <i class="ti ti-package"></i> Produk Tersedia
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-box">
+            <h3>200K+</h3>
+            <p class="mb-0 text-muted small">
+              <i class="ti ti-users"></i> Pelanggan Puas
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-box">
+            <h3>1.000+</h3>
+            <p class="mb-0 text-muted small">
+              <i class="ti ti-certificate"></i> Penjual Terpercaya
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-box">
+            <h3><i class="ti ti-star-filled" style="color:#ff6b35;"></i> 4.8</h3>
+            <p class="mb-0 text-muted small">Rating Aplikasi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-3">Kategori Produk</h2>
+      <div class="text-center mb-4">
+        <span class="category-pill active"><i class="ti ti-layout-grid"></i> Semua</span>
+        <span class="category-pill"><i class="ti ti-shirt"></i> Fashion</span>
+        <span class="category-pill"><i class="ti ti-device-mobile"></i> Elektronik</span>
+        <span class="category-pill"><i class="ti ti-home"></i> Rumah Tangga</span>
+        <span class="category-pill"><i class="ti ti-sparkles"></i> Kecantikan</span>
+        <span class="category-pill"><i class="ti ti-book"></i> Buku</span>
+        <span class="category-pill"><i class="ti ti-ball-football"></i> Olahraga</span>
+      </div>
+    </div>
+  </section>
+  <section class="pb-5" id="promo">
+    <div class="container">
+      <h2 class="text-center mb-4">
+        <i class="ti ti-flame" style="color:#ff6b35;"></i> Produk Terlaris
+      </h2>
+      <div class="row g-4">
+        <div class="col-6 col-md-3">
+          <div class="card product-card shadow-sm h-100 position-relative">
+            <span class="badge-diskon">-30%</span>
+            <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Sepatu" class="card-img-top" alt="Sepatu"/>
+            <div class="card-body">
+              <p class="card-title mb-1 small fw-bold">Sepatu Sneakers Casual</p>
+              <p class="harga-asli mb-0">Rp 350.000</p>
+              <p class="harga-diskon">Rp 245.000</p>
+              <p class="small text-warning mb-2">
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                (128)
+              </p>
+              <button class="btn primary-btn btn-sm w-100" onclick="tambahKeranjang('Sepatu Sneakers')">
+                <i class="ti ti-shopping-cart-plus"></i> Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card product-card shadow-sm h-100 position-relative">
+            <span class="badge-diskon">-20%</span>
+            <img src="https://via.placeholder.com/300x200/0d6efd/ffffff?text=Headphone" class="card-img-top" alt="Headphone"/>
+            <div class="card-body">
+              <p class="card-title mb-1 small fw-bold">Headphone Bluetooth Pro</p>
+              <p class="harga-asli mb-0">Rp 500.000</p>
+              <p class="harga-diskon">Rp 400.000</p>
+              <p class="small text-warning mb-2">
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                (95)
+              </p>
+              <button class="btn primary-btn btn-sm w-100" onclick="tambahKeranjang('Headphone Bluetooth')">
+                <i class="ti ti-shopping-cart-plus"></i> Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card product-card shadow-sm h-100 position-relative">
+            <span class="badge-diskon">-15%</span>
+            <img src="https://via.placeholder.com/300x200/198754/ffffff?text=Tas" class="card-img-top" alt="Tas"/>
+            <div class="card-body">
+              <p class="card-title mb-1 small fw-bold">Tas Ransel Anti Air</p>
+              <p class="harga-asli mb-0">Rp 280.000</p>
+              <p class="harga-diskon">Rp 238.000</p>
+              <p class="small text-warning mb-2">
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                (67)
+              </p>
+              <button class="btn primary-btn btn-sm w-100" onclick="tambahKeranjang('Tas Ransel')">
+                <i class="ti ti-shopping-cart-plus"></i> Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card product-card shadow-sm h-100 position-relative">
+            <span class="badge-diskon">-25%</span>
+            <img src="https://via.placeholder.com/300x200/6f42c1/ffffff?text=Smartwatch" class="card-img-top" alt="Smartwatch"/>
+            <div class="card-body">
+              <p class="card-title mb-1 small fw-bold">Smartwatch Series X</p>
+              <p class="harga-asli mb-0">Rp 800.000</p>
+              <p class="harga-diskon">Rp 600.000</p>
+              <p class="small text-warning mb-2">
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                <i class="ti ti-star-filled"></i>
+                (214)
+              </p>
+              <button class="btn primary-btn btn-sm w-100" onclick="tambahKeranjang('Smartwatch Series X')">
+                <i class="ti ti-shopping-cart-plus"></i> Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="text-center mt-4">
+        <a href="products.html" class="btn primary-btn btn-lg">
+          Lihat Semua Produk <i class="ti ti-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="p-4 rounded text-white d-flex align-items-center" style="background: linear-gradient(135deg, #667eea, #764ba2); min-height: 150px;">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <i class="ti ti-truck"></i> Gratis Ongkir!
+              </h4>
+              <p class="mb-2">Untuk pembelian min. Rp 100.000 ke seluruh Indonesia.</p>
+              <a href="products.html" class="btn btn-light btn-sm">
+                <i class="ti ti-shopping-cart"></i> Belanja Sekarang
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-4 rounded text-white d-flex align-items-center" style="background: linear-gradient(135deg, #f7971e, #ffd200); min-height: 150px;">
+            <div>
+              <h4 class="fw-bold mb-1 text-dark">
+                <i class="ti ti-gift" style="color:#333;"></i> Flash Sale Hari Ini!
+              </h4>
+              <p class="mb-2 text-dark">Diskon hingga 70% untuk produk pilihan. Jangan sampai kehabisan!</p>
+              <a href="products.html" class="btn btn-dark btn-sm">
+                <i class="ti ti-bolt"></i> Lihat Flash Sale
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Apa Kata Pelanggan Kami?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card shadow-sm p-3">
+            <p class="text-warning mb-2">
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+            </p>
+            <p class="fst-italic">"Barang cepat sampai, packaging rapih, dan kualitas sesuai foto. Puas banget belanja di ForryBar!"</p>
+            <div class="d-flex align-items-center">
+              <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Profile"/>
+              <strong>Reihan.c. - Bandung</strong>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm p-3">
+            <p class="text-warning mb-2">
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+            </p>
+            <p class="fst-italic">"Harganya murah banget dibanding tempat lain. CS juga responsif dan ramah. Recommended!"</p>
+            <div class="d-flex align-items-center">
+              <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Profile"/>
+              <strong>Joenathan - Jakarta</strong>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm p-3">
+            <p class="text-warning mb-2">
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+            </p>
+            <p class="fst-italic">"Website-nya gampang dipakai, checkout cepat. Produknya juga lengkap. Bakal belanja lagi!"</p>
+            <div class="d-flex align-items-center">
+              <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Profile"/>
+              <strong>Ujang Kedu - Depok</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5 bg-light" id="kontak">
+    <div class="container text-center">
+      <h2 class="mb-3">Ada Pertanyaan?</h2>
+      <p>Hubungi tim Customer Service kami yang siap membantu 7 hari seminggu.</p>
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-3 mb-3">
+          <div class="card p-3 shadow-sm">
+            <h5><i class="ti ti-message-circle" style="color:#ff6b35;"></i> Live Chat</h5>
+            <p class="small">Senin–Minggu<br/>08.00 – 22.00</p>
+            <button class="btn primary-btn btn-sm" onclick="alert('Fitur chat sedang dalam pengembangan!')">
+              <i class="ti ti-send"></i> Chat Sekarang
+            </button>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card p-3 shadow-sm">
+            <h5><i class="ti ti-phone" style="color:#ff6b35;"></i> Telepon</h5>
+            <p class="small">0800-1234-5678<br/>(Bebas Pulsa)</p>
+            <button class="btn primary-btn btn-sm" onclick="alert('Hubungi: 0800-1234-5678')">
+              <i class="ti ti-phone-call"></i> Hubungi Kami
+            </button>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card p-3 shadow-sm">
+            <h5><i class="ti ti-mail" style="color:#ff6b35;"></i> Email</h5>
+            <p class="small">cs@forrybar.id<br/>Balasan dalam 24 jam</p>
+            <button class="btn primary-btn btn-sm" onclick="alert('Email: cs@forrybar.id')">
+              <i class="ti ti-mail-forward"></i> Kirim Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <h5 style="color: #ff6b35;">
+            <i class="ti ti-shopping-bag"></i> ForryBar
+          </h5>
+          <p class="small">Belanja mudah, hemat, dan terpercaya sejak 2021.</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h6 class="text-white">Tentang Kami</h6>
+          <ul class="list-unstyled small">
+            <li><a href="products.html" class="text-secondary"><i class="ti ti-package"></i> Produk Kami</a></li>
+            <li><a href="#" class="text-secondary"><i class="ti ti-help-circle"></i> Cara Belanja</a></li>
+            <li><a href="#" class="text-secondary"><i class="ti ti-shield-lock"></i> Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h6 class="text-white">Bantuan</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#" class="text-secondary"><i class="ti ti-message-question"></i> FAQ</a></li>
+            <li><a href="#kontak" class="text-secondary"><i class="ti ti-headset"></i> Kontak CS</a></li>
+            <li><a href="#" class="text-secondary"><i class="ti ti-map-pin"></i> Lacak Pesanan</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h6 class="text-white">Metode Pembayaran</h6>
+          <p class="small text-secondary">
+            <i class="ti ti-building-bank"></i> Transfer Bank &middot;
+            <i class="ti ti-qrcode"></i> QRIS &middot;
+            <i class="ti ti-cash"></i> COD &middot;
+            <i class="ti ti-credit-card"></i> Kartu Kredit &middot;
+            <i class="ti ti-wallet"></i> Dompet Digital
+          </p>
+        </div>
+      </div>
+      <hr class="border-secondary"/>
+      <p class="text-center text-secondary small mb-0">	&#169; 2026 ForryBar. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let keranjang = [];
+
+    function tambahKeranjang(namaBarang) {
+      keranjang.push(namaBarang);
+      alert(`"${namaBarang}" berhasil ditambahkan ke keranjang!\nTotal item: ${keranjang.length}`);
+    }
+
+    function cari(e) {
+      e.preventDefault();
+      const kata = document.getElementById('searchInput').value;
+      alert(`Mencari: "${kata}"\nFitur pencarian sedang dikembangkan!`);
+    }
+    document.querySelectorAll('.category-pill').forEach(pill => {
+      pill.addEventListener('click', function () {
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

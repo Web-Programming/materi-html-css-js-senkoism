@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Produk - ForryBar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .navbar-brand { font-weight: bold; font-size: 1.4rem; color: #ff6b35 !important; }
+
+    .product-card { transition: transform 0.2s; cursor: pointer; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important; }
+
+    .harga-asli { text-decoration: line-through; color: #999; font-size: 12px; }
+    .harga-diskon { color: #dc3545; font-weight: bold; }
+
+    .badge-diskon {
+      position: absolute; top: 8px; left: 8px;
+      background: #dc3545; color: white;
+      padding: 3px 8px; border-radius: 20px; font-size: 11px;
+    }
+
+    .sidebar-filter .form-check-label { font-size: 14px; }
+    .primary-btn { background-color: #ff6b35; color: white; border: none; }
+    .primary-btn:hover { background-color: #e55a25; color: white; }
+
+    .page-header {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white; padding: 40px 0; text-align: center;
+    }
+
+    footer { background-color: #222; color: #ccc; padding: 25px 0; text-align: center; }
+
+    .ti { font-size: 1.1em; vertical-align: middle; }
+  </style>
+</head>
+<body style="min-width: 360px;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="home.html">
+        <i class="ti ti-shopping-bag"></i> ForryBar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navToko">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navToko">
+        <form class="d-flex mx-auto my-2 my-lg-0" style="width: 40%;" onsubmit="e => e.preventDefault()">
+          <input class="form-control me-2" type="search" placeholder="Cari produk..."/>
+          <button class="btn primary-btn" type="submit">
+            <i class="ti ti-search"></i> Cari
+          </button>
+        </form>
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="products.html">Produk</a></li>
+          <li class="nav-item"><a class="nav-link" href="home.html#kontak">Kontak</a></li>
+          <li class="nav-item">
+            <button class="btn primary-btn btn-sm ms-2" onclick="lihatKeranjang()">
+              <i class="ti ti-shopping-cart"></i> Keranjang
+              <span class="badge bg-white text-danger" id="badge-count">0</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="page-header">
+    <h2 class="fw-bold"><i class="ti ti-packages"></i> Semua Produk</h2>
+    <p class="mb-0">Temukan produk terbaik dengan harga paling bersaing</p>
+  </div>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm p-3">
+          <h6 class="fw-bold mb-3">
+            <i class="ti ti-adjustments-horizontal" style="color:#ff6b35;"></i> Filter Produk
+          </h6>
+          <p class="mb-1 fw-bold small">Kategori</p>
+          <div class="sidebar-filter mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kat" id="semua" checked/>
+              <label class="form-check-label" for="semua">
+                <i class="ti ti-layout-grid"></i> Semua
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kat" id="fashion"/>
+              <label class="form-check-label" for="fashion">
+                <i class="ti ti-shirt"></i> Fashion
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kat" id="elektronik"/>
+              <label class="form-check-label" for="elektronik">
+                <i class="ti ti-device-mobile"></i> Elektronik
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kat" id="rumah"/>
+              <label class="form-check-label" for="rumah">
+                <i class="ti ti-home"></i> Rumah Tangga
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kat" id="kecantikan"/>
+              <label class="form-check-label" for="kecantikan">
+                <i class="ti ti-sparkles"></i> Kecantikan
+              </label>
+            </div>
+          </div>
+
+          <p class="mb-1 fw-bold small">Rentang Harga</p>
+          <input type="range" class="form-range mb-1" min="0" max="2000000" step="50000" id="rangeHarga"
+            oninput="document.getElementById('nilaiHarga').innerText = 'Rp ' + parseInt(this.value).toLocaleString('id')"/>
+          <small id="nilaiHarga" class="text-muted">Rp 2.000.000</small>
+
+          <hr/>
+          <p class="mb-1 fw-bold small">Rating</p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="r5"/>
+            <label class="form-check-label small" for="r5">
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              (5)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="r4"/>
+            <label class="form-check-label small" for="r4">
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              <i class="ti ti-star-filled text-warning"></i>
+              ke atas
+            </label>
+          </div>
+
+          <button class="btn primary-btn btn-sm w-100 mt-3" onclick="alert('Filter diterapkan!')">
+            <i class="ti ti-filter"></i> Terapkan Filter
+          </button>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <p class="mb-0 text-muted small">
+            <i class="ti ti-layout-grid"></i> Menampilkan 8 produk
+          </p>
+          <select class="form-select form-select-sm w-auto">
+            <option>Urutkan: Relevansi</option>
+            <option>Harga Terendah</option>
+            <option>Harga Tertinggi</option>
+            <option>Rating Tertinggi</option>
+            <option>Terbaru</option>
+          </select>
+        </div>
+
+        <div class="row g-3" id="produk-grid">
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-30%</span>
+              <img src="https://via.placeholder.com/200x150/ff6b35/fff?text=Sepatu" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Sepatu Sneakers Casual</p>
+                <p class="harga-asli mb-0">Rp 350.000</p>
+                <p class="harga-diskon mb-1">Rp 245.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.9 (128)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Sepatu Sneakers')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-20%</span>
+              <img src="https://via.placeholder.com/200x150/0d6efd/fff?text=Headphone" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Headphone Bluetooth Pro</p>
+                <p class="harga-asli mb-0">Rp 500.000</p>
+                <p class="harga-diskon mb-1">Rp 400.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.8 (95)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Headphone Bluetooth')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-15%</span>
+              <img src="https://via.placeholder.com/200x150/198754/fff?text=Tas" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Tas Ransel Anti Air</p>
+                <p class="harga-asli mb-0">Rp 280.000</p>
+                <p class="harga-diskon mb-1">Rp 238.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.7 (67)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Tas Ransel')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-25%</span>
+              <img src="https://via.placeholder.com/200x150/6f42c1/fff?text=Smartwatch" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Smartwatch Series X</p>
+                <p class="harga-asli mb-0">Rp 800.000</p>
+                <p class="harga-diskon mb-1">Rp 600.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.9 (214)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Smartwatch')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <img src="https://via.placeholder.com/200x150/dc3545/fff?text=Kemeja" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Kemeja Flanel Pria</p>
+                <p class="harga-diskon mb-1">Rp 175.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.5 (43)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Kemeja Flanel')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-40%</span>
+              <img src="https://via.placeholder.com/200x150/fd7e14/fff?text=Blender" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Blender Portable Mini</p>
+                <p class="harga-asli mb-0">Rp 300.000</p>
+                <p class="harga-diskon mb-1">Rp 180.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.6 (89)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Blender Mini')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <img src="https://via.placeholder.com/200x150/e83e8c/fff?text=Skincare" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Set Skincare Korea</p>
+                <p class="harga-diskon mb-1">Rp 220.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.8 (312)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Skincare Korea')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card shadow-sm h-100 position-relative">
+              <span class="badge-diskon">-10%</span>
+              <img src="https://via.placeholder.com/200x150/20c997/fff?text=Buku" class="card-img-top" alt="p"/>
+              <div class="card-body p-2">
+                <p class="small fw-bold mb-1">Buku Belajar Coding</p>
+                <p class="harga-asli mb-0">Rp 120.000</p>
+                <p class="harga-diskon mb-1">Rp 108.000</p>
+                <p class="small text-warning mb-2">
+                  <i class="ti ti-star-filled"></i> 4.7 (56)
+                </p>
+                <button class="btn primary-btn btn-sm w-100" onclick="beli('Buku Coding')">
+                  <i class="ti ti-shopping-cart-plus"></i> Keranjang
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link"><i class="ti ti-chevron-left"></i></a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#"><i class="ti ti-chevron-right"></i></a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="mb-1">	&#169; 2026 ForryBar. All Rights Reserved.</p>
+    <p class="small">
+      <a href="home.html" class="text-secondary">
+        <i class="ti ti-arrow-left"></i> Kembali ke Beranda
+      </a>
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let keranjang = [];
+
+    function beli(nama) {
+      keranjang.push(nama);
+      document.getElementById('badge-count').innerText = keranjang.length;
+      const toast = document.createElement('div');
+      toast.className = 'alert alert-success position-fixed bottom-0 end-0 m-3 shadow';
+      toast.style.zIndex = '9999';
+      toast.innerHTML = `<i class="ti ti-circle-check"></i> <strong>${nama}</strong> ditambahkan ke keranjang!`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+    }
+
+    function lihatKeranjang() {
+      if (keranjang.length === 0) {
+        alert('Keranjang masih kosong!');
+      } else {
+        alert('Isi Keranjang:\n' + keranjang.map((i, n) => `${n+1}. ${i}`).join('\n'));
+      }
+    }
+  </script>
+</body>
+</html>
